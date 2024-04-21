@@ -1,33 +1,60 @@
 "use client"
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
+import { motion } from 'framer-motion';
 
-import { ModalOverlayAnimation, OverlayConfig } from "@/interface/Modal";
+import { ModalOverlayAnimation } from '@/constants';
+import { OverlayConfig } from "@/interface/Modal";
 
-const fadeInAnimation = (finalOpacity: number) => keyframes`
-  0% { opacity: 0; }
-  100% { opacity: ${finalOpacity}; }
-`;
-
-const Backdrop = styled.div<{background_color: string, opacity: number, animation: ModalOverlayAnimation, animationDuration: number}>`
+const Backdrop = styled(motion.div)<{background_color: string, animation: ModalOverlayAnimation, animationDuration: number, opacity: number}>`
   position: fixed;
   background-color: ${({ background_color }) => background_color};
-  opacity: ${({opacity}) => opacity};
   height: 100%;
   width: 100%;
-  animation: ${({animation, opacity}) => animation === ModalOverlayAnimation.FADE_IN ? fadeInAnimation(opacity) : null};
-  animation-duration: ${({animationDuration}) => animationDuration}s;
+  opacity: ${({opacity}) => opacity};
 `;
 
-const Overlay: React.FC<{ children: React.ReactNode, overlayConfig: OverlayConfig }> = ({children, overlayConfig}) => {
+const modalAnimation = ({
+  animation,
+  duration,
+  opacity
+}: {
+    animation: ModalOverlayAnimation,
+    duration: number,
+    opacity: number
+  }): any => {
+  let hidden = {};
+  let visible = {};
+  
+  if (animation === ModalOverlayAnimation.FADE_IN) {
+    hidden = {opacity: 0};
+    visible = {opacity};
+  } else {
+    return null;
+  }
+
+  visible = {...visible, transition: {duration}};
+  hidden = {...hidden, transition: {duration}};
+  return {hidden, visible};
+}
+
+const Overlay: React.FC<{overlayConfig: OverlayConfig}> = ({ overlayConfig }) => {
   return (
     <Backdrop
       background_color={overlayConfig.backgroundColor!}
-      opacity = {overlayConfig.opacity!}
       animation = {overlayConfig.modalAnimationConfig!.animationType as ModalOverlayAnimation}
       animationDuration = {overlayConfig.modalAnimationConfig!.animationDurationInSeconds as number}
-    >
-      {children}
-    </Backdrop>
+      opacity = {overlayConfig.opacity! as number}
+      variants={
+        modalAnimation({
+          animation: overlayConfig.modalAnimationConfig!.animationType as ModalOverlayAnimation, 
+          duration: overlayConfig.modalAnimationConfig!.animationDurationInSeconds as number,
+          opacity: overlayConfig.opacity!
+        })
+      }
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
+    />
   )
 };
 
