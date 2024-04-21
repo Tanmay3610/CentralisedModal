@@ -1,196 +1,17 @@
 "use client"
 import React from "react";
-import styled, { css, keyframes } from "styled-components";
+import styled, { css } from "styled-components";
+import { motion } from 'framer-motion';
 
-import {
+import { 
   ModalVerticalPosition, 
   ModalHorizontalPosition,
-  WrapperConfig,
   ModalWrapperAnimations,
-  SlideAnimationDirection
-} from "@/interface/Modal";
-
-const fadeInAnimation = keyframes`
-  0% { opacity: 0; }
-  100% { opacity: 1; }
-`;
-
-const slideInTop = ({verticalAlign, horizontalAlign}: {verticalAlign: ModalVerticalPosition, horizontalAlign: ModalHorizontalPosition}) => keyframes`
-  0% {
-    bottom: -100%; 
-    ${
-      horizontalAlign === ModalHorizontalPosition.RIGHT 
-       ? "left: 100%; transform: translateX(-100%);" 
-       : horizontalAlign === ModalHorizontalPosition.CENTER 
-       ? "left: 50%; transform: translateX(-50%);" 
-       : "left: 0%;"
-    }
-    }
-  100% {
-    ${
-      verticalAlign === ModalVerticalPosition.TOP 
-      ? "bottom: 100%;" 
-      : verticalAlign === ModalVerticalPosition.BOTTOM 
-      ? "bottom: 0%;"
-      : "bottom: 50%;"
-    }
-    ${
-      horizontalAlign === ModalHorizontalPosition.RIGHT 
-       ? "left: 100%;" 
-       : horizontalAlign === ModalHorizontalPosition.CENTER 
-       ? "left: 50%;" 
-       : "left: 0%;"
-    }
-
-    ${
-      verticalAlign === ModalVerticalPosition.TOP 
-      ? "bottom: 100%; transform: translateY(100%)" 
-      : verticalAlign === ModalVerticalPosition.BOTTOM 
-      ? "transform: "
-      : "transform: translateY(50%)"
-    }
-
-    ${
-      horizontalAlign === ModalHorizontalPosition.RIGHT 
-       ? "translateX(-100%)" 
-       : horizontalAlign === ModalHorizontalPosition.CENTER 
-       ? "translateX(-50%)" 
-       : null
-    };
-  }
-`;
-
-const slideInBottom = ({verticalAlign, horizontalAlign}: {verticalAlign: ModalVerticalPosition, horizontalAlign: ModalHorizontalPosition}) => keyframes`
-  0% {
-    top: -100%;
-    ${
-      horizontalAlign === ModalHorizontalPosition.RIGHT 
-       ? "left: 100%; transform: translateX(-100%);" 
-       : horizontalAlign === ModalHorizontalPosition.CENTER 
-       ? "left: 50%; transform: translateX(-50%);" 
-       : "left: 0%;"
-    }
-  }
-  100% {
-    ${
-      verticalAlign === ModalVerticalPosition.TOP 
-      ? "top: 0%;"
-      : verticalAlign === ModalVerticalPosition.BOTTOM 
-      ? "top: 100%;" 
-      : "top: 50%;"
-    }
-    ${
-      horizontalAlign === ModalHorizontalPosition.RIGHT 
-       ? "left: 100%;" 
-       : horizontalAlign === ModalHorizontalPosition.CENTER 
-       ? "left: 50%;" 
-       : "left: 0%;"
-    }
-
-    ${
-      verticalAlign === ModalVerticalPosition.TOP 
-      ? "transform: "
-      : verticalAlign === ModalVerticalPosition.BOTTOM 
-      ? "transform: translateY(-100%)" 
-      : "transform: translateY(-50%)"
-    }
-    ${
-      horizontalAlign === ModalHorizontalPosition.RIGHT 
-       ? "translateX(-100%)" 
-       : horizontalAlign === ModalHorizontalPosition.CENTER 
-       ? "translateX(-50%)" 
-       : null
-    };
-  }
-`;
-
-const slideInLeft = ({verticalAlign, horizontalAlign}: {verticalAlign: ModalVerticalPosition, horizontalAlign: ModalHorizontalPosition}) => keyframes`
-  0% {
-    left: 200%;
-    ${
-      verticalAlign === ModalVerticalPosition.TOP 
-      ? "top: 0%;" 
-      : verticalAlign === ModalVerticalPosition.BOTTOM
-      ? "top: 100%; transform: translateY(-100%);" 
-      : "top: 50%; transform: translateY(-50%);"
-    }
-  }
-  100% {
-    ${
-      verticalAlign === ModalVerticalPosition.TOP 
-      ? "top: 0%;"
-      : verticalAlign === ModalVerticalPosition.BOTTOM 
-      ? "top: 100%;" 
-      : "top: 50%;"
-    }
-    ${
-      horizontalAlign === ModalHorizontalPosition.RIGHT 
-      ? "left: 100%;"
-      : horizontalAlign === ModalHorizontalPosition.CENTER 
-      ? "left: 50%;"
-      : "left: 0%;"
-    }
-
-    ${
-      verticalAlign === ModalVerticalPosition.TOP 
-      ? "transform: "
-      : verticalAlign === ModalVerticalPosition.BOTTOM 
-      ? "transform: translateY(-100%)" 
-      : "transform: translateY(-50%)"
-    }
-    ${
-      horizontalAlign === ModalHorizontalPosition.RIGHT 
-      ? "translateX(-100%)" 
-      : horizontalAlign === ModalHorizontalPosition.CENTER 
-      ? "translateX(-50%)" 
-      : null
-    };
-  }
-`;
-
-const slideInRight = ({verticalAlign, horizontalAlign}: {verticalAlign: ModalVerticalPosition, horizontalAlign: ModalHorizontalPosition}) => keyframes`
-  0% {
-    left: -100%;
-    ${
-      verticalAlign === ModalVerticalPosition.TOP 
-      ? "top: 0%;" 
-      : verticalAlign === ModalVerticalPosition.BOTTOM
-      ? "top: 100%; transform: translateY(-100%);" 
-      : "top: 50%; transform: translateY(-50%);"
-    }
-  }
-  100% {
-    ${
-      verticalAlign === ModalVerticalPosition.TOP 
-      ? "top: 0%;"
-      : verticalAlign === ModalVerticalPosition.BOTTOM 
-      ? "top: 100%;" 
-      : "top: 50%;"
-    }
-    ${
-      horizontalAlign === ModalHorizontalPosition.RIGHT 
-      ? "left: 100%;" 
-      : horizontalAlign === ModalHorizontalPosition.CENTER 
-      ? "left: 50%;" 
-      : "left: 0%;"
-    }
-
-    ${
-      verticalAlign === ModalVerticalPosition.TOP 
-      ? "transform: "
-      : verticalAlign === ModalVerticalPosition.BOTTOM 
-      ? "transform: translateY(-100%)" 
-      : "transform: translateY(-50%)"
-    }
-    ${
-      horizontalAlign === ModalHorizontalPosition.RIGHT 
-      ? "translateX(-100%)" 
-      : horizontalAlign === ModalHorizontalPosition.CENTER 
-      ? "translateX(-50%)" 
-      : null
-    };
-}
-`;
+  SlideAnimationDirection,
+  WidthType,
+  HeightType 
+} from '@/constants';
+import { WrapperConfig } from "@/interface/Modal";
 
 const calculateTop = (verticalAlign: number) => {
   return verticalAlign === ModalVerticalPosition.TOP 
@@ -229,36 +50,130 @@ const calculateAllDimensions = ({horizontalAlign, verticalAlign}: {horizontalAli
   `
 }
 
-const WrapperContainer = styled.div<{
+const modalAnimation = ({
+  animation, 
+  slideDirection,
+  verticalAlign,
+  horizontalAlign,
+  duration
+}: {
+    animation: ModalWrapperAnimations,
+    slideDirection: SlideAnimationDirection,
+    verticalAlign: ModalVerticalPosition,
+    horizontalAlign: ModalHorizontalPosition,
+    duration: number
+  }): any => {
+  let hidden = {};
+  let visible = {};
+  
+  if (animation === ModalWrapperAnimations.FADE_IN) {
+    hidden = {opacity: 0};
+    visible = {opacity: 1};
+  } else if (animation === ModalWrapperAnimations.SLIDE_IN) {
+    if (slideDirection === SlideAnimationDirection.BOTTOM_TOP) {
+      if (horizontalAlign === ModalHorizontalPosition.CENTER) {
+        hidden = { y: "100vh", x: "-50%" };
+        visible = { x: "-50%" };
+      } else if (horizontalAlign === ModalHorizontalPosition.RIGHT) {
+        hidden = { y: "100vh" };
+        visible = { x: 0 };
+      } else if (horizontalAlign === ModalHorizontalPosition.LEFT) {
+        hidden = { y: "200vh" };
+        visible = { x: 0 };
+      }
+
+      if (verticalAlign === ModalVerticalPosition.BOTTOM) {
+        visible = { ...visible, y: 0 };
+      } else if (verticalAlign === ModalVerticalPosition.TOP) {
+        visible = { ...visible, y: 0 };
+      } else {
+        visible = { ...visible, y: "-50%" };
+      }
+    } else if (slideDirection === SlideAnimationDirection.TOP_BOTTOM) {
+      if (horizontalAlign === ModalHorizontalPosition.CENTER) {
+        hidden = { y: "-100vh", x: "-50%" };
+        visible = { x: "-50%" };
+      } else if (horizontalAlign === ModalHorizontalPosition.RIGHT) {
+        hidden = { y: "-100vh" };
+        visible = { x: 0 };
+      } else if (horizontalAlign === ModalHorizontalPosition.LEFT) {
+        hidden = { y: "-100vh" };
+        visible = { x: 0 };
+      }
+
+      if (verticalAlign === ModalVerticalPosition.BOTTOM) {
+        visible = { ...visible, y: 0 };
+      } else if (verticalAlign === ModalVerticalPosition.TOP) {
+        visible = { ...visible, y: 0 };
+      } else {
+        visible = { ...visible, y: "-50%" };
+      }
+    } else if (slideDirection === SlideAnimationDirection.LEFT_RIGHT) {
+      if (verticalAlign === ModalVerticalPosition.BOTTOM) {
+        hidden = { x: "-100vw" };
+        visible = { y: 0 };
+      } else if (verticalAlign === ModalVerticalPosition.TOP) {
+        hidden = { x: "-100vw" };
+        visible = { y: 0 };
+      } else {
+        hidden = { x: "-100vw", y: "-50%" };
+      }
+
+      if (horizontalAlign === ModalHorizontalPosition.CENTER) {
+        visible = { ...visible, x: "-50%" };
+      } else if (horizontalAlign === ModalHorizontalPosition.RIGHT) {
+        visible = { ...visible, x: 0 };
+      } else if (horizontalAlign === ModalHorizontalPosition.LEFT) {
+        visible = { ...visible, x: 0 };
+      }
+    } else if (slideDirection === SlideAnimationDirection.RIGHT_LEFT) {
+      if (verticalAlign === ModalVerticalPosition.BOTTOM) {
+        hidden = { x: "100vw" };
+        visible = { y: 0 };
+      } else if (verticalAlign === ModalVerticalPosition.TOP) {
+        hidden = { x: "100vw" };
+        visible = { y: 0 };
+      } else {
+        hidden = { x: "100vw", y: "-50%" };
+      }
+
+      if (horizontalAlign === ModalHorizontalPosition.CENTER) {
+        visible = { ...visible, x: "-50%" };
+      } else if (horizontalAlign === ModalHorizontalPosition.RIGHT) {
+        visible = { ...visible, x: 0 };
+      } else if (horizontalAlign === ModalHorizontalPosition.LEFT) {
+        visible = { ...visible, x: 0 };
+      }
+    }
+  } else {
+    return null;
+  }
+
+  visible = {...visible, transition: {duration}};
+  hidden = {...hidden, transition: {duration}};
+  return {hidden, visible};
+}
+
+const WrapperContainer = styled(motion.div)<{
   verticalAlign: ModalVerticalPosition, 
   horizontalAlign: ModalHorizontalPosition, 
   animation: ModalWrapperAnimations, 
   animationDuration: number, 
-  slideDirection: SlideAnimationDirection 
+  slideDirection: SlideAnimationDirection,
+  widthType: WidthType,
+  heightType: HeightType,
+  height: number,
+  width: number
 }>`
   position: absolute;
-
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
   z-index: 7;
-  width: fit-content;
-  
-  ${({animation, slideDirection, verticalAlign, horizontalAlign, animationDuration}) => {
-    if (animation === ModalWrapperAnimations.FADE_IN) {
-      return css`animation: ${fadeInAnimation} ${animationDuration}s`;
-    } else if (animation === ModalWrapperAnimations.NONE) {
-      return css`${calculateAllDimensions({verticalAlign, horizontalAlign})}`;
-    } else {
-      switch (slideDirection) {
-        case SlideAnimationDirection.BOTTOM_TOP:
-          return css`animation: ${slideInTop({verticalAlign, horizontalAlign})} ${animationDuration}s forwards`;
-        case SlideAnimationDirection.TOP_BOTTOM:
-          return css`animation: ${slideInBottom({verticalAlign, horizontalAlign})} ${animationDuration}s forwards`;
-        case SlideAnimationDirection.RIGHT_LEFT:
-          return css`animation: ${slideInLeft({verticalAlign, horizontalAlign})} ${animationDuration}s forwards`;
-        default:
-          return css`animation: ${slideInRight({verticalAlign, horizontalAlign})} ${animationDuration}s forwards`;
-      }
-    }
-  }};
+  width: ${({widthType, width}) => widthType === WidthType.FIT_CONTENT ? "fit-content" : widthType === WidthType.COVER ? "100%" : `${width}vw`};
+  height: ${({heightType, height}) => heightType === HeightType.FIT_CONTENT ? "fit-content" : heightType === HeightType.COVER ? "100%" : `${height}vh`};
+  ${({verticalAlign, horizontalAlign}) => css`${calculateAllDimensions({verticalAlign, horizontalAlign})}`};
 
   transform: ${({ horizontalAlign, verticalAlign }) => 
     horizontalAlign === ModalHorizontalPosition.CENTER 
@@ -272,23 +187,29 @@ const WrapperContainer = styled.div<{
       ? "translate(0%, -50%)"
       : null
   };
-
-  transition: transform 1s;
 `;
 
 const Wrapper: React.FC<{ 
   children: React.ReactNode, 
   wrapperConfig: WrapperConfig, 
-  closeModal: (result: any) => void
+  closeModal: (result: any | null) => void,
+  widthType: WidthType,
+  heightType: HeightType,
+  height: number,
+  width: number
 }> = ({
   children, 
   wrapperConfig, 
-  closeModal
+  closeModal,
+  widthType,
+  heightType,
+  height,
+  width
 }) => {
   const WrapperRef: React.MutableRefObject<HTMLDivElement | null> = React.useRef<HTMLDivElement>(null);
 
   const handleClose = () => {
-    closeModal({});
+    closeModal(null);
   }
 
   const handleOutsideClick = (e: MouseEvent): void => {
@@ -307,16 +228,32 @@ const Wrapper: React.FC<{
   });
   
   return (
-    <WrapperContainer 
-      ref={WrapperRef}
-      verticalAlign={wrapperConfig.verticalAlignment!}
-      horizontalAlign={wrapperConfig.horizontalAlignment!}
-      animation = {wrapperConfig.modalAnimationConfig!.animationType as ModalWrapperAnimations}
-      animationDuration = {wrapperConfig.modalAnimationConfig!.animationDurationInSeconds as number}
-      slideDirection = {wrapperConfig.modalAnimationConfig!.slideAnimationDirection as SlideAnimationDirection}
-    >
-      {children}
-    </WrapperContainer>
+      <WrapperContainer
+        ref={WrapperRef}
+        verticalAlign={wrapperConfig.verticalAlignment!}
+        horizontalAlign={wrapperConfig.horizontalAlignment!}
+        animation = {wrapperConfig.modalAnimationConfig!.animationType as ModalWrapperAnimations}
+        animationDuration = {wrapperConfig.modalAnimationConfig!.animationDurationInSeconds as number}
+        slideDirection = {wrapperConfig.modalAnimationConfig!.slideAnimationDirection as SlideAnimationDirection}
+        widthType={widthType}
+        width={width}
+        heightType={heightType}
+        height={height}
+        variants={
+          modalAnimation({
+            animation: wrapperConfig.modalAnimationConfig!.animationType as ModalWrapperAnimations, 
+            slideDirection: wrapperConfig.modalAnimationConfig!.slideAnimationDirection as SlideAnimationDirection,
+            verticalAlign: wrapperConfig.verticalAlignment!,
+            horizontalAlign: wrapperConfig.horizontalAlignment!,
+            duration: wrapperConfig.modalAnimationConfig!.animationDurationInSeconds as number
+          })
+        }
+        initial="hidden"
+        animate="visible"
+        exit="hidden"
+      >
+        {children}
+      </WrapperContainer>
   )
 }
 

@@ -1,50 +1,16 @@
-export enum ModalTypes {
-  Modal,
-  None
-}
-
-export enum ModalHorizontalPosition {
-  LEFT,
-  RIGHT,
-  CENTER,
-  CUSTOM
-}
-
-export enum ModalVerticalPosition {
-  TOP,
-  BOTTOM,
-  CENTER,
-  CUSTOM
-}
-
-export enum ModalCloseButtonVerticalPosition {
-  TOP,
-  BOTTOM,
-}
-
-export enum ModalCloseButtonHorizontalPosition {
-  LEFT,
-  RIGHT,
-  CENTER
-}
-
-export enum SlideAnimationDirection {
-  TOP_BOTTOM,
-  BOTTOM_TOP,
-  LEFT_RIGHT,
-  RIGHT_LEFT
-}
-
-export enum ModalWrapperAnimations {
-  FADE_IN,
-  SLIDE_IN,
-  NONE
-}
-
-export enum ModalOverlayAnimation {
-  FADE_IN,
-  NONE
-}
+import { 
+  ModalWrapperAnimations, 
+  SlideAnimationDirection, 
+  ModalOverlayAnimation, 
+  ModalVerticalPosition, 
+  ModalHorizontalPosition, 
+  ModalCloseButtonHorizontalPosition, 
+  ModalCloseButtonVerticalPosition, 
+  WidthType, 
+  HeightType,
+  ChildrenHorizontalPosition,
+  ChildrenVerticalPosition
+} from "@/constants";
 
 export interface ModalWrapperAnimationConfig {
   animationType?: ModalWrapperAnimations;
@@ -75,7 +41,16 @@ export interface WrapperConfig {
 export interface ContentConfig {
   backgroundColor?: string,
   padding?: number;
-  borderRadius?: number;
+  topLeftBorderRadius?: number;
+  topRightBorderRadius?: number;
+  bottomLeftBorderRadius?: number;
+  bottomRightBorderRadius?: number;
+  widthType?: WidthType;
+  heightType?: HeightType;
+  height?: number;
+  width?: number;
+  childrenHorizontalPosition?: ChildrenHorizontalPosition;
+  childrenVerticalPosition?: ChildrenVerticalPosition;
 }
 
 export interface ModalConfig {
@@ -84,11 +59,52 @@ export interface ModalConfig {
   contentConfig?: ContentConfig;
 }
 
+
+// Bottom Sheets Interfaces
+export type BottomSheetAnimationConfig = Omit<ModalWrapperAnimationConfig, "animationType" | "slideAnimationDirection">
+export type BottomSheetWrapperConfig = Omit<WrapperConfig, "verticalAlignment" | "horizontalAlignment" | "modalAnimationConfig"> & {modalAnimationConfig?: BottomSheetAnimationConfig}
+export type BottomSheetContentConfig = Omit<ContentConfig, "widthType" | "width" | "bottomLeftBorderRadius" | "bottomRightBorderRadius">
+export type BottomSheetConfig = Omit<ModalConfig, "wrapperConfig" | "contentConfig"> & {wrapperConfig?: BottomSheetWrapperConfig, contentConfig?: BottomSheetContentConfig};
+
+// Dialog Interfaces
+export type DialogBoxWrapperConfig = Omit<WrapperConfig, "verticalAlignment" | "horizontalAlignment">
+export type DialogBoxContentConfig = Omit<ContentConfig, "widthType" | "heightType" | "width" | "height" | "childrenHorizontalPosition" | "childrenVerticalPosition">
+export type DialogBoxConfig = Omit<ModalConfig, "wrapperConfig"> & {wrapperConfig?: DialogBoxWrapperConfig, contentConfig?: DialogBoxContentConfig};
+
+// SideBar Interfaces
+export type SideBarWidthType = Exclude<WidthType, WidthType.COVER>;
+export type SideBarHorizontalAlignment = Exclude<ModalHorizontalPosition, ModalHorizontalPosition.CENTER | ModalHorizontalPosition.CUSTOM>
+export type SidebarAnimationConfig = Omit<ModalWrapperAnimationConfig, "animationType" | "slideAnimationDirection">
+export type SideBarWrapperConfig = Omit<WrapperConfig, "verticalAlignment" | "horizontalAlignment" | "modalAnimationConfig"> & {horizontalAlignment?: SideBarHorizontalAlignment, modalAnimationConfig: SidebarAnimationConfig};
+export type SideBarContentConfig = Omit<ContentConfig, "widthType" | "heightType" | "height" | "childrenHorizontalPosition"> & {widthType?: SideBarWidthType}
+export type SideBarConfig = Omit<ModalConfig, "wrapperConfig" | "contentConfig"> & {wrapperConfig?: SideBarWrapperConfig, contentConfig?: SideBarContentConfig};
+
+type RequireOnlyOne<T, Keys extends keyof T = keyof T> =
+  Pick<T, Exclude<keyof T, Keys>>
+  & {
+      [K in Keys]-?:
+          Required<Pick<T, K>>
+          & Partial<Record<Exclude<Keys, K>, undefined>>
+  }[Keys]
+
+interface ModalContentType<T> {
+  modalConfig: T;
+  urlComponentProps?: object;
+  contentUrl: string;
+  content: React.ReactNode;
+}
+export type OpenModalParameter<T> = RequireOnlyOne<ModalContentType<T>, "contentUrl" | "content">;
+
 export interface ModalContextType {
   modal: boolean;
-  openModal: (options: {modalContent: React.ReactNode, modalConfig: ModalConfig}) => void;
-  closeModal: (result: any) => void; 
+  routeKey: string;
+  openModal: (options: OpenModalParameter<ModalConfig>) => void;
+  openDialogBox: (options: OpenModalParameter<DialogBoxConfig>) => void;
+  openBottomSheet: (options: OpenModalParameter<BottomSheetConfig>) => void;
+  openSideBar: (options: OpenModalParameter<SideBarConfig>) => void;
+  closeModal: (result: any | null) => void; 
   onCloseModal: (handlerFunction: any) => void;
   content: React.ReactNode,
-  modalConfig: ModalConfig
+  modalConfig: ModalConfig,
+  setResult: (result: any) => void;
 };
