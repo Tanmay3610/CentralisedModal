@@ -3,8 +3,6 @@ import React, { FormEvent } from "react";
 import styled from 'styled-components';
 import { useRouter } from "next/navigation";
 
-import { ModalSource } from "@/constants";
-import { ModalParams } from "@/interface/RouteConfig";
 import { useModal } from "@/context/ModalContext";
 
 const BoxContainer = styled.div`
@@ -32,14 +30,14 @@ const SubmitButton = styled.button`
   margin-top: 10px;
 `;
 
-export default function Login({initialEmail, modalProps}: {initialEmail: string, modalProps: ModalParams}) {
+export default function Login({initialEmail, isModal}: {initialEmail: string, isModal: Boolean}) {
   const [details, setDetails] = React.useState<{email: string, password: string}>({email: initialEmail, password: ""});
   const { closeModal } = useModal();
   const router = useRouter();
 
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    if (modalProps?.source === ModalSource) {
+    if (isModal) {
       closeModal(details);
     } else {
       router.push('/home');

@@ -1,3 +1,4 @@
+"use client";
 import {
   ModalVerticalPosition, 
   ModalHorizontalPosition,
@@ -11,10 +12,10 @@ import {
   ChildrenVerticalPosition,
   HeightType
 } from '@/constants';
-import { ModalConfig } from "@/interface/Modal";
+import { IModalConfig } from "@/interface/Modal/Modal";
 
 const defaultBackgroundColor = "white";
-export const defaultModalProperties: ModalConfig = {
+export const defaultModalProperties: IModalConfig = {
   overlayConfig: {
     backgroundColor: defaultBackgroundColor,
     opacity: 0.5,
@@ -48,7 +49,7 @@ export const defaultModalProperties: ModalConfig = {
   }
 }
 
-export const defaultBottomSheetProperties: ModalConfig = {
+export const defaultBottomSheetProperties: IModalConfig = {
   overlayConfig: {
     backgroundColor: defaultBackgroundColor,
     opacity: 0.5,
@@ -84,7 +85,7 @@ export const defaultBottomSheetProperties: ModalConfig = {
   }
 }
 
-export const defaultDialogBoxProperties: ModalConfig = {
+export const defaultDialogBoxProperties: IModalConfig = {
   overlayConfig: {
     backgroundColor: defaultBackgroundColor,
     opacity: 0.5,
@@ -100,8 +101,8 @@ export const defaultDialogBoxProperties: ModalConfig = {
     closeButtonHorizontalPosition: ModalCloseButtonHorizontalPosition.CENTER,
     backdropClose: true,
     modalAnimationConfig: {
-      animationType: ModalWrapperAnimations.NONE,
-      animationDurationInSeconds: 0
+      animationType: ModalWrapperAnimations.FADE_IN,
+      animationDurationInSeconds: 2
     }
   },
   contentConfig:{
@@ -118,7 +119,7 @@ export const defaultDialogBoxProperties: ModalConfig = {
   }
 }
 
-export const defaultSidebarProperties: ModalConfig = {
+export const defaultSidebarProperties: IModalConfig = {
   overlayConfig: {
     backgroundColor: defaultBackgroundColor,
     opacity: 0.5,

@@ -1,7 +1,7 @@
 "use client"
 
 import { ChildrenHorizontalPosition, ChildrenVerticalPosition, HeightType, WidthType } from "@/constants";
-import { ContentConfig } from "@/interface/Modal";
+import { IContentConfig } from "@/interface/Modal/Modal";
 import styled from "styled-components";
 
 const ContentContainer = styled.div<{
@@ -29,7 +29,7 @@ const ContentContainer = styled.div<{
   justify-content: ${({childrenverticalpos}) => childrenverticalpos === ChildrenVerticalPosition.BOTTOM ? "flex-end" : childrenverticalpos === ChildrenVerticalPosition.TOP ? "flex-start": "center"};
 `;
 
-const Content: React.FC<{ children: React.ReactNode, contentConfig: ContentConfig }> = ({children, contentConfig}) => {
+const Content: React.FC<{ children: React.ReactNode, contentConfig: IContentConfig }> = ({children, contentConfig}) => {
   return (
     <ContentContainer
       padding={contentConfig.padding!} 

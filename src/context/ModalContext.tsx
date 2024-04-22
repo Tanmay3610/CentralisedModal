@@ -1,17 +1,13 @@
 "use client"
-
 import React from "react";
 
-import routeMap from "@/routeConfig";
+import { routeMap } from "@/routeConfig";
 import { ModalTypes, SlideAnimationDirection, ModalHorizontalPosition } from "@/constants";
-import {
-  ModalContextType,
-  ModalConfig,
-  BottomSheetConfig,
-  DialogBoxConfig,
-  SideBarConfig,
-  OpenModalParameter
-} from "@/interface/Modal";
+import { IModalConfig } from "@/interface/Modal/Modal";
+import { OpenModal, ModalContextType } from "@/interface/ModalContext";
+import { DialogBoxConfig } from "@/interface/Modal/DialogBox";
+import { SideBarConfig,  } from "@/interface/Modal/SideBar";
+import { BottomSheetConfig } from "@/interface/Modal/BottomSheet";
 import { 
   defaultBottomSheetProperties, 
   defaultDialogBoxProperties, 
@@ -22,8 +18,8 @@ import { RouteProps } from "@/interface/RouteConfig";
 
 const ModalContext = React.createContext<ModalContextType>({} as ModalContextType);
 
-const fillDefaultValue = ({type, modalConfig}:{type: ModalTypes, modalConfig: ModalConfig | BottomSheetConfig | DialogBoxConfig | SideBarConfig}) : ModalConfig => {
-  let defaultValue: ModalConfig | null = null;
+const fillDefaultValue = ({type, modalConfig}:{type: ModalTypes, modalConfig: IModalConfig | BottomSheetConfig | DialogBoxConfig | SideBarConfig}) : IModalConfig => {
+  let defaultValue: IModalConfig | null = null;
   switch (type) {
     case ModalTypes.MODAL:
       defaultValue = defaultModalProperties;
@@ -40,6 +36,7 @@ const fillDefaultValue = ({type, modalConfig}:{type: ModalTypes, modalConfig: Mo
         defaultValue!.wrapperConfig!.modalAnimationConfig!.slideAnimationDirection = (modalConfig as SideBarConfig).wrapperConfig!.horizontalAlignment === ModalHorizontalPosition.RIGHT 
           ? SlideAnimationDirection.RIGHT_LEFT 
           : SlideAnimationDirection.LEFT_RIGHT
+        console.log(defaultValue!.wrapperConfig!.modalAnimationConfig!.slideAnimationDirection);
       }
       break;
     default:
@@ -74,40 +71,36 @@ const ModalProvider = ({ children }: {children: React.ReactNode}) => {
   const [modal, setModal] = React.useState<boolean>(false);
   
   let routeKey: React.MutableRefObject<string> = React.useRef("");
-  let modalProperties: React.MutableRefObject<ModalConfig> = React.useRef(defaultModalProperties);
+  let modalProperties: React.MutableRefObject<IModalConfig> = React.useRef(defaultModalProperties);
   let onCloseHandler: any = () => {};
   let content: React.MutableRefObject<React.ReactNode> = React.useRef(<></>);
   let resultObject: React.MutableRefObject<any> = React.useRef({});
 
   const openModal = ({
-    content: modalContent, 
-    contentUrl,
-    urlComponentProps,
+    content: modalContent,
     modalConfig
-  }: OpenModalParameter<ModalConfig>
+  }: OpenModal<IModalConfig>
   ): void => {
-    if (contentUrl) {
-      const Component: RouteProps = routeMap[contentUrl];
-      content.current = <Component.component  {...urlComponentProps} modalProps = {Component.params}/>;
+    if ('component' in modalContent) {
+      content.current = modalContent.component;
     } else {
-      content.current = modalContent;
+      const Component: RouteProps = routeMap[modalContent.route];
+      content.current = <Component.component  params={modalContent.params} />;
     }
     modalProperties.current = fillDefaultValue({type: ModalTypes.MODAL, modalConfig});
     setModal(true);
   }
 
   const openBottomSheet = ({
-    content: modalContent, 
-    contentUrl,
-    urlComponentProps,
+    content: modalContent,
     modalConfig
-  }: OpenModalParameter<BottomSheetConfig>
+  }: OpenModal<BottomSheetConfig>
   ): void => {
-    if (contentUrl) {
-      const Component: RouteProps = routeMap[contentUrl];
-      content.current = <Component.component  {...urlComponentProps} modalProps = {Component.params}/>;
+    if ('component' in modalContent) {
+      content.current = modalContent.component;
     } else {
-      content.current = modalContent;
+      const Component: RouteProps = routeMap[modalContent.route];
+      content.current = <Component.component  params={modalContent.params} />;
     }
     modalProperties.current = modalProperties.current = fillDefaultValue({type: ModalTypes.BOTTOM_SHEET, modalConfig});
     setModal(true);
@@ -115,16 +108,14 @@ const ModalProvider = ({ children }: {children: React.ReactNode}) => {
 
   const openDialogBox = ({
     content: modalContent,
-    contentUrl,
-    urlComponentProps,
     modalConfig
-  }: OpenModalParameter<DialogBoxConfig>
+  }: OpenModal<DialogBoxConfig>
   ): void => {
-    if (contentUrl) {
-      const Component: RouteProps = routeMap[contentUrl];
-      content.current = <Component.component  {...urlComponentProps} modalProps = {Component.params}/>;
+    if ('component' in modalContent) {
+      content.current = modalContent.component;
     } else {
-      content.current = modalContent;
+      const Component: RouteProps = routeMap[modalContent.route];
+      content.current = <Component.component  params={modalContent.params} />;
     }
     modalProperties.current = modalProperties.current = fillDefaultValue({type: ModalTypes.DIALOG_BOX, modalConfig});
     setModal(true);
@@ -132,16 +123,14 @@ const ModalProvider = ({ children }: {children: React.ReactNode}) => {
 
   const openSideBar = ({
     content: modalContent,
-    contentUrl,
-    urlComponentProps,
     modalConfig
-  }: OpenModalParameter<SideBarConfig>
+  }: OpenModal<SideBarConfig>
   ): void => {
-    if (contentUrl) {
-      const Component: RouteProps = routeMap[contentUrl];
-      content.current = <Component.component  {...urlComponentProps} modalProps = {Component.params}/>;
+    if ('component' in modalContent) {
+      content.current = modalContent.component;
     } else {
-      content.current = modalContent;
+      const Component: RouteProps = routeMap[modalContent.route];
+      content.current = <Component.component  {...modalContent.params} />;
     }
     modalProperties.current = modalProperties.current = fillDefaultValue({type: ModalTypes.SIDE_BAR, modalConfig});
     setModal(true);
@@ -176,9 +165,7 @@ const ModalProvider = ({ children }: {children: React.ReactNode}) => {
     content: content.current,
     modalConfig: modalProperties.current,
     setResult
-  }), [
-      modal
-    ]);
+  }), [modal]);
 
   return (
     <ModalContext.Provider value={sharedObject}>

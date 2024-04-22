@@ -21,7 +21,7 @@ const Modal: React.FC = () => {
       contentConfig,
     }
   } = useModal();
-
+    console.log("Modal Rendered");
     return (
       <AnimatePresence>
         {modal && (

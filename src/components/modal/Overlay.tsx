@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { motion } from 'framer-motion';
 
 import { ModalOverlayAnimation } from '@/constants';
-import { OverlayConfig } from "@/interface/Modal";
+import { IOverlayConfig } from "@/interface/Modal/Modal";
 
 const Backdrop = styled(motion.div)<{background_color: string, animation: ModalOverlayAnimation, animationDuration: number, opacity: number}>`
   position: fixed;
@@ -37,7 +37,7 @@ const modalAnimation = ({
   return {hidden, visible};
 }
 
-const Overlay: React.FC<{overlayConfig: OverlayConfig}> = ({ overlayConfig }) => {
+const Overlay: React.FC<{overlayConfig: IOverlayConfig}> = ({ overlayConfig }) => {
   return (
     <Backdrop
       background_color={overlayConfig.backgroundColor!}

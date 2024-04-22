@@ -11,7 +11,7 @@ import {
   WidthType,
   HeightType 
 } from '@/constants';
-import { WrapperConfig } from "@/interface/Modal";
+import { IWrapperConfig } from "@/interface/Modal/Modal";
 
 const calculateTop = (verticalAlign: number) => {
   return verticalAlign === ModalVerticalPosition.TOP 
@@ -191,7 +191,7 @@ const WrapperContainer = styled(motion.div)<{
 
 const Wrapper: React.FC<{ 
   children: React.ReactNode, 
-  wrapperConfig: WrapperConfig, 
+  wrapperConfig: IWrapperConfig, 
   closeModal: (result: any | null) => void,
   widthType: WidthType,
   heightType: HeightType,

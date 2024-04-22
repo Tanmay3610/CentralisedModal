@@ -1,3 +1,4 @@
+"use client";
 import ModalProvider from "@/context/ModalContext";
 import Modal from "@/components/modal/Modal";
 
