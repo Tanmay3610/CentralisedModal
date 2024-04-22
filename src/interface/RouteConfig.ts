@@ -3,7 +3,7 @@ export interface ModalParams {
 }
 
 export interface RouteProps {
-  component: (props: any) => React.JSX.Element,
+  component: (props: any) => React.ReactNode,
   params: ModalParams
 }
 

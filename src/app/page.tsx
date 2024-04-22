@@ -29,7 +29,9 @@ export default function Home() {
 
   const onHandleModalClick = () => {
     openModal({
-      content: <Modal />,
+      content: {
+        component: <Modal />
+      }, 
       modalConfig: {
         overlayConfig: {
           backgroundColor: "pink",
@@ -62,7 +64,9 @@ export default function Home() {
 
   const onHandleBottomSheetClick = () => {
     openBottomSheet({
-      content: <Modal />, 
+      content: {
+        component: <Modal />
+      }, 
       modalConfig: {
         overlayConfig: {
           backgroundColor: "pink",
@@ -90,7 +94,9 @@ export default function Home() {
 
   const onHandleDialogClick = () => {
     openDialogBox({
-      content: <Modal />, 
+      content: {
+        route: '/home'
+      },
       modalConfig: {
         overlayConfig: {
           backgroundColor: "pink",
@@ -102,9 +108,7 @@ export default function Home() {
       wrapperConfig: {
         backdropClose: true,
         modalAnimationConfig: {
-          animationType: ModalWrapperAnimations.SLIDE_IN,
-          animationDurationInSeconds: 1,
-          slideAnimationDirection: SlideAnimationDirection.BOTTOM_TOP
+          animationDurationInSeconds: 1
         }
       },
       contentConfig: {
@@ -121,9 +125,12 @@ export default function Home() {
 
   const onHandleSideBarClick = () => {
     openSideBar({
-      contentUrl: '/login',
-      urlComponentProps: {
-        initialEmail: "tanmay"
+      content: {
+        route: '/login',
+        params: {
+          initialEmail: "tanmay",
+          isModal: true
+        }
       },
       modalConfig: {
         overlayConfig: {
