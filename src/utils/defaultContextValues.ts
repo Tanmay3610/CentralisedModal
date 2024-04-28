@@ -10,11 +10,15 @@ import {
   WidthType,
   ChildrenHorizontalPosition,
   ChildrenVerticalPosition,
-  HeightType
-} from '@/constants';
+  HeightType,
+  ModalTypes
+} from '@/utils/constants';
+import { BottomSheetConfig } from '@/interface/Modal/BottomSheet';
+import { DialogBoxConfig } from '@/interface/Modal/DialogBox';
 import { IModalConfig } from "@/interface/Modal/Modal";
+import { SideBarConfig } from '@/interface/Modal/SideBar';
 
-const defaultBackgroundColor = "white";
+const defaultBackgroundColor = "255,255,255";
 export const defaultModalProperties: IModalConfig = {
   overlayConfig: {
     backgroundColor: defaultBackgroundColor,
@@ -153,3 +157,54 @@ export const defaultSidebarProperties: IModalConfig = {
     childrenVerticalPosition: ChildrenVerticalPosition.TOP
   }
 }
+
+const fillDefaultValue = ({type, modalConfig}:{type: ModalTypes, modalConfig: IModalConfig | BottomSheetConfig | DialogBoxConfig | SideBarConfig | undefined}) : IModalConfig => {
+  let defaultValue: IModalConfig | null = null;
+  switch (type) {
+    case ModalTypes.MODAL:
+      defaultValue = defaultModalProperties;
+      break;
+    case ModalTypes.BOTTOM_SHEET:
+      defaultValue = defaultBottomSheetProperties;
+      break;
+    case ModalTypes.DIALOG_BOX:
+      defaultValue = defaultDialogBoxProperties;
+      break;
+    case ModalTypes.SIDE_BAR:
+      defaultValue = defaultSidebarProperties;
+      if ((modalConfig as SideBarConfig).wrapperConfig?.horizontalAlignment) {
+        defaultValue!.wrapperConfig!.modalAnimationConfig!.slideAnimationDirection = (modalConfig as SideBarConfig).wrapperConfig!.horizontalAlignment === ModalHorizontalPosition.RIGHT 
+          ? SlideAnimationDirection.RIGHT_LEFT 
+          : SlideAnimationDirection.LEFT_RIGHT
+        console.log(defaultValue!.wrapperConfig!.modalAnimationConfig!.slideAnimationDirection);
+      }
+      break;
+    default:
+      defaultValue = {}
+  }
+
+  return {
+    overlayConfig: {
+      ...defaultValue.overlayConfig,
+      ...modalConfig?.overlayConfig,
+      modalAnimationConfig: {
+        ...defaultValue.overlayConfig!.modalAnimationConfig,
+        ...modalConfig?.overlayConfig?.modalAnimationConfig
+      }, 
+    },
+    wrapperConfig: {
+      ...defaultValue.wrapperConfig,
+      ...modalConfig?.wrapperConfig,
+      modalAnimationConfig: {
+        ...defaultValue.wrapperConfig!.modalAnimationConfig,
+        ...modalConfig?.wrapperConfig?.modalAnimationConfig,
+      }
+    },
+    contentConfig: {
+      ...defaultValue.contentConfig,
+      ...modalConfig?.contentConfig
+    }
+  };
+}
+
+export default fillDefaultValue;

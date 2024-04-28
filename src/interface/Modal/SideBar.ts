@@ -1,4 +1,4 @@
-import { WidthType, ModalHorizontalPosition } from "@/constants";
+import { WidthType, ModalHorizontalPosition } from "@/utils/constants";
 import { IModalWrapperAnimationConfig, IModalConfig, IWrapperConfig, IContentConfig } from "@/interface/Modal/Modal";
 
 type SideBarWidthType = Exclude<WidthType, WidthType.COVER>;

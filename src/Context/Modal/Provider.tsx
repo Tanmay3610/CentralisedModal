@@ -1,80 +1,28 @@
 "use client"
 import React from "react";
 
-import { routeMap } from "@/routeConfig";
-import { ModalTypes, SlideAnimationDirection, ModalHorizontalPosition } from "@/constants";
+import ModalContext from "@/Context/Modal/Context"
+import fillDefaultValue, { defaultModalProperties } from "@/utils/defaultContextValues";
+
+import { routeMap } from "@/utils/routeConfig";
+import { ModalTypes } from "@/utils/constants";
 import { IModalConfig } from "@/interface/Modal/Modal";
-import { OpenModal, ModalContextType } from "@/interface/ModalContext";
+import { OpenModal } from "@/interface/ModalContext";
 import { DialogBoxConfig } from "@/interface/Modal/DialogBox";
 import { SideBarConfig,  } from "@/interface/Modal/SideBar";
 import { BottomSheetConfig } from "@/interface/Modal/BottomSheet";
-import { 
-  defaultBottomSheetProperties, 
-  defaultDialogBoxProperties, 
-  defaultModalProperties, 
-  defaultSidebarProperties 
-} from "./defaultContextValues";
 import { RouteProps } from "@/interface/RouteConfig";
-
-const ModalContext = React.createContext<ModalContextType>({} as ModalContextType);
-
-const fillDefaultValue = ({type, modalConfig}:{type: ModalTypes, modalConfig: IModalConfig | BottomSheetConfig | DialogBoxConfig | SideBarConfig}) : IModalConfig => {
-  let defaultValue: IModalConfig | null = null;
-  switch (type) {
-    case ModalTypes.MODAL:
-      defaultValue = defaultModalProperties;
-      break;
-    case ModalTypes.BOTTOM_SHEET:
-      defaultValue = defaultBottomSheetProperties;
-      break;
-    case ModalTypes.DIALOG_BOX:
-      defaultValue = defaultDialogBoxProperties;
-      break;
-    case ModalTypes.SIDE_BAR:
-      defaultValue = defaultSidebarProperties;
-      if ((modalConfig as SideBarConfig).wrapperConfig?.horizontalAlignment) {
-        defaultValue!.wrapperConfig!.modalAnimationConfig!.slideAnimationDirection = (modalConfig as SideBarConfig).wrapperConfig!.horizontalAlignment === ModalHorizontalPosition.RIGHT 
-          ? SlideAnimationDirection.RIGHT_LEFT 
-          : SlideAnimationDirection.LEFT_RIGHT
-        console.log(defaultValue!.wrapperConfig!.modalAnimationConfig!.slideAnimationDirection);
-      }
-      break;
-    default:
-      defaultValue = {}
-  }
-
-  return {
-    overlayConfig: {
-      ...defaultValue.overlayConfig,
-      ...modalConfig.overlayConfig,
-      modalAnimationConfig: {
-        ...defaultValue.overlayConfig!.modalAnimationConfig,
-        ...modalConfig.overlayConfig?.modalAnimationConfig
-      }, 
-    },
-    wrapperConfig: {
-      ...defaultValue.wrapperConfig,
-      ...modalConfig.wrapperConfig,
-      modalAnimationConfig: {
-        ...defaultValue.wrapperConfig!.modalAnimationConfig,
-        ...modalConfig.wrapperConfig?.modalAnimationConfig,
-      }
-    },
-    contentConfig: {
-      ...defaultValue.contentConfig,
-      ...modalConfig.contentConfig
-    }
-  };
-}
+import { useModal } from "@/utils/useModal";
 
 const ModalProvider = ({ children }: {children: React.ReactNode}) => {
   const [modal, setModal] = React.useState<boolean>(false);
-  
-  let routeKey: React.MutableRefObject<string> = React.useRef("");
+
   let modalProperties: React.MutableRefObject<IModalConfig> = React.useRef(defaultModalProperties);
   let onCloseHandler: any = () => {};
   let content: React.MutableRefObject<React.ReactNode> = React.useRef(<></>);
   let resultObject: React.MutableRefObject<any> = React.useRef({});
+
+  const { closeModal: selfCloseModal, setResult: selfSetResult } = useModal();
 
   const openModal = ({
     content: modalContent,
@@ -88,6 +36,7 @@ const ModalProvider = ({ children }: {children: React.ReactNode}) => {
       content.current = <Component.component  params={modalContent.params} />;
     }
     modalProperties.current = fillDefaultValue({type: ModalTypes.MODAL, modalConfig});
+    console.log(modalProperties.current)
     setModal(true);
   }
 
@@ -144,9 +93,20 @@ const ModalProvider = ({ children }: {children: React.ReactNode}) => {
     setModal(false);
   }
 
+  const closeSelf = (result: any | null) => {
+    if (selfCloseModal) {
+      selfCloseModal(result);
+    }
+  }
+
   const setResult = (result: any) => {
-    console.log(result);
     resultObject.current = result;
+  }
+
+  const setResultSelf = (result: any) => {
+    if (selfSetResult) {
+      selfSetResult(result);
+    }
   }
 
   const onCloseModal = (handlerFunction: any) => {
@@ -154,17 +114,18 @@ const ModalProvider = ({ children }: {children: React.ReactNode}) => {
   }
 
   const sharedObject = React.useMemo(() => ({
-    modal, 
+    modal,
+    content: content.current,
+    modalConfig: modalProperties.current,
     openModal,
     openBottomSheet,
     openDialogBox,
     openSideBar,
     closeModal,
-    routeKey: routeKey.current,
     onCloseModal,
-    content: content.current,
-    modalConfig: modalProperties.current,
-    setResult
+    setResult,
+    closeSelf,
+    setResultSelf
   }), [modal]);
 
   return (
@@ -173,9 +134,5 @@ const ModalProvider = ({ children }: {children: React.ReactNode}) => {
     </ModalContext.Provider>
   )
 }
-
-export const useModal = (): ModalContextType => {
-  return React.useContext(ModalContext)
-};
 
 export default ModalProvider;

@@ -1,6 +1,6 @@
 "use client"
 
-import { ChildrenHorizontalPosition, ChildrenVerticalPosition, HeightType, WidthType } from "@/constants";
+import { ChildrenHorizontalPosition, ChildrenVerticalPosition, HeightType, WidthType } from "@/utils/constants";
 import { IContentConfig } from "@/interface/Modal/Modal";
 import styled from "styled-components";
 
@@ -18,13 +18,13 @@ const ContentContainer = styled.div<{
   childrenverticalpos: ChildrenVerticalPosition, 
   childrenhorizontalpos: ChildrenHorizontalPosition
 }>`
-  padding: ${({padding}) => padding}px;
-  background-color: ${({backgroundcolor}) => backgroundcolor};
+  padding: ${({padding}) => `${padding}px ${padding}px ${padding}px ${padding}px`};
+  background-color: ${({backgroundcolor}) => `rgb(${backgroundcolor})`};
   border-radius: ${({bottomleftborderradius, bottomrightborderradius, topleftborderradius, toprightborderradius}) => `${topleftborderradius}px ${toprightborderradius}px ${bottomrightborderradius}px ${bottomleftborderradius}px`};
-  width: ${({widthtype, width}) => widthtype === WidthType.FIT_CONTENT ? "fit-content" : widthtype === WidthType.COVER ? "100%" : `${width}vw`};
+  width: ${({widthtype, width}) => widthtype === WidthType.FIT_CONTENT ? "fit-content" : widthtype === WidthType.COVER ? "100vw" : `${width}vw`};
   display: flex;
   flex-direction: column;
-  height: ${({heighttype, height}) => heighttype === HeightType.FIT_CONTENT ? "fit-content" : heighttype === HeightType.COVER ? "100%" : `${height}vh`};
+  height: ${({heighttype, height}) => heighttype === HeightType.FIT_CONTENT ? "fit-content" : heighttype === HeightType.COVER ? "100vh" : `${height}vh`};
   align-items: ${({childrenhorizontalpos}) => childrenhorizontalpos === ChildrenHorizontalPosition.CENTER ? "center" : childrenhorizontalpos === ChildrenHorizontalPosition.LEFT ? "flex-start" : "flex-end"};
   justify-content: ${({childrenverticalpos}) => childrenverticalpos === ChildrenVerticalPosition.BOTTOM ? "flex-end" : childrenverticalpos === ChildrenVerticalPosition.TOP ? "flex-start": "center"};
 `;
