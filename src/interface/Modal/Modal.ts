@@ -10,7 +10,7 @@ import {
   HeightType,
   ChildrenHorizontalPosition,
   ChildrenVerticalPosition
-} from "@/constants";
+} from "@/utils/constants";
 
 export interface IModalWrapperAnimationConfig {
   animationType?: ModalWrapperAnimations;

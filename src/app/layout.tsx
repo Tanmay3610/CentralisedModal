@@ -1,5 +1,5 @@
 "use client";
-import ModalProvider from "@/context/ModalContext";
+import ModalProvider from "@/Context/Modal/Provider";
 import Modal from "@/components/modal/Modal";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
@@ -8,7 +8,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body style={{margin: "0px", padding: "0px"}}>
         <ModalProvider>
           <Modal />
-          {children}
+          {children}x
         </ModalProvider>
       </body>
     </html>

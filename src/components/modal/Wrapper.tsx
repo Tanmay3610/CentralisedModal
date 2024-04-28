@@ -1,6 +1,6 @@
 "use client"
 import React from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { motion } from 'framer-motion';
 
 import { 
@@ -10,45 +10,8 @@ import {
   SlideAnimationDirection,
   WidthType,
   HeightType 
-} from '@/constants';
+} from '@/utils/constants';
 import { IWrapperConfig } from "@/interface/Modal/Modal";
-
-const calculateTop = (verticalAlign: number) => {
-  return verticalAlign === ModalVerticalPosition.TOP 
-    ? "0%" 
-    : verticalAlign === ModalVerticalPosition.CENTER 
-    ? "50%"
-    : null
-}
-
-const calculateBottom = (verticalAlign: number) => {
-  return verticalAlign === ModalVerticalPosition.BOTTOM 
-    ? "0%"
-    : null
-}
-
-const calculateLeft = (horizontalAlign: number) => {
-  return horizontalAlign === ModalHorizontalPosition.LEFT 
-    ? "0%" 
-    : horizontalAlign === ModalHorizontalPosition.CENTER 
-    ? "50%"
-    : null
-}
-
-const calculateRight = (horizontalAlign: number) => {
-  return horizontalAlign === ModalHorizontalPosition.RIGHT 
-    ? "0%"
-    : null
-}
-
-const calculateAllDimensions = ({horizontalAlign, verticalAlign}: {horizontalAlign: number, verticalAlign: number}) => {
-  return `
-    top: ${calculateTop(verticalAlign)};
-    bottom: ${calculateBottom(verticalAlign)};
-    left: ${calculateLeft(horizontalAlign)};
-    right: ${calculateRight(horizontalAlign)};
-  `
-}
 
 const modalAnimation = ({
   animation, 
@@ -65,15 +28,13 @@ const modalAnimation = ({
   }): any => {
   let hidden = {};
   let visible = {};
-  
   if (animation === ModalWrapperAnimations.FADE_IN) {
     hidden = {opacity: 0};
     visible = {opacity: 1};
   } else if (animation === ModalWrapperAnimations.SLIDE_IN) {
     if (slideDirection === SlideAnimationDirection.BOTTOM_TOP) {
       if (horizontalAlign === ModalHorizontalPosition.CENTER) {
-        hidden = { y: "100vh", x: "-50%" };
-        visible = { x: "-50%" };
+        hidden = { y: "100vh"};
       } else if (horizontalAlign === ModalHorizontalPosition.RIGHT) {
         hidden = { y: "100vh" };
         visible = { x: 0 };
@@ -87,12 +48,11 @@ const modalAnimation = ({
       } else if (verticalAlign === ModalVerticalPosition.TOP) {
         visible = { ...visible, y: 0 };
       } else {
-        visible = { ...visible, y: "-50%" };
+        visible = { ...visible, y: 0 };
       }
     } else if (slideDirection === SlideAnimationDirection.TOP_BOTTOM) {
       if (horizontalAlign === ModalHorizontalPosition.CENTER) {
-        hidden = { y: "-100vh", x: "-50%" };
-        visible = { x: "-50%" };
+        hidden = { y: "-100vh" };
       } else if (horizontalAlign === ModalHorizontalPosition.RIGHT) {
         hidden = { y: "-100vh" };
         visible = { x: 0 };
@@ -106,7 +66,7 @@ const modalAnimation = ({
       } else if (verticalAlign === ModalVerticalPosition.TOP) {
         visible = { ...visible, y: 0 };
       } else {
-        visible = { ...visible, y: "-50%" };
+        visible = { ...visible, y: 0 };
       }
     } else if (slideDirection === SlideAnimationDirection.LEFT_RIGHT) {
       if (verticalAlign === ModalVerticalPosition.BOTTOM) {
@@ -116,11 +76,11 @@ const modalAnimation = ({
         hidden = { x: "-100vw" };
         visible = { y: 0 };
       } else {
-        hidden = { x: "-100vw", y: "-50%" };
+        hidden = { x: "-100vw" };
       }
 
       if (horizontalAlign === ModalHorizontalPosition.CENTER) {
-        visible = { ...visible, x: "-50%" };
+        visible = { ...visible, x: 0 };
       } else if (horizontalAlign === ModalHorizontalPosition.RIGHT) {
         visible = { ...visible, x: 0 };
       } else if (horizontalAlign === ModalHorizontalPosition.LEFT) {
@@ -134,11 +94,11 @@ const modalAnimation = ({
         hidden = { x: "100vw" };
         visible = { y: 0 };
       } else {
-        hidden = { x: "100vw", y: "-50%" };
+        hidden = { x: "100vw"};
       }
 
       if (horizontalAlign === ModalHorizontalPosition.CENTER) {
-        visible = { ...visible, x: "-50%" };
+        visible = { ...visible };
       } else if (horizontalAlign === ModalHorizontalPosition.RIGHT) {
         visible = { ...visible, x: 0 };
       } else if (horizontalAlign === ModalHorizontalPosition.LEFT) {
@@ -165,28 +125,11 @@ const WrapperContainer = styled(motion.div)<{
   height: number,
   width: number
 }>`
-  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 1;
-  z-index: 7;
-  width: ${({widthType, width}) => widthType === WidthType.FIT_CONTENT ? "fit-content" : widthType === WidthType.COVER ? "100%" : `${width}vw`};
-  height: ${({heightType, height}) => heightType === HeightType.FIT_CONTENT ? "fit-content" : heightType === HeightType.COVER ? "100%" : `${height}vh`};
-  ${({verticalAlign, horizontalAlign}) => css`${calculateAllDimensions({verticalAlign, horizontalAlign})}`};
-
-  transform: ${({ horizontalAlign, verticalAlign }) => 
-    horizontalAlign === ModalHorizontalPosition.CENTER 
-      && verticalAlign === ModalVerticalPosition.CENTER
-      ? "translate(-50%, -50%)"
-      : horizontalAlign === ModalHorizontalPosition.CENTER 
-      && verticalAlign !== ModalVerticalPosition.CENTER
-      ? "translate(-50%, 0%)"
-      : horizontalAlign !== ModalHorizontalPosition.CENTER 
-      && verticalAlign === ModalVerticalPosition.CENTER
-      ? "translate(0%, -50%)"
-      : null
-  };
+  width: ${({widthType, width}) => widthType === WidthType.FIT_CONTENT ? "fit-content" : widthType === WidthType.COVER ? "100vw" : `${width}vw`};
+  height: ${({heightType, height}) => heightType === HeightType.FIT_CONTENT ? "fit-content" : heightType === HeightType.COVER ? "100vh" : `${height}vh`};
 `;
 
 const Wrapper: React.FC<{ 
@@ -221,10 +164,13 @@ const Wrapper: React.FC<{
   React.useEffect(() => {
     if (wrapperConfig.backdropClose!) {
       document.addEventListener("mousedown", handleOutsideClick);
-      return () => {
-        document.removeEventListener("mousedown", handleOutsideClick);
-      };
     }
+
+    return () => {
+      if (wrapperConfig.backdropClose!) {
+        document.removeEventListener("mousedown", handleOutsideClick);
+      }
+    };
   });
   
   return (

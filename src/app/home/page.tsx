@@ -4,6 +4,3 @@ const Home = () => {
 }
 
 export default Home;
-
-
-// overriding context

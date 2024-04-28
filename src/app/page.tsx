@@ -1,7 +1,7 @@
 "use client"
 import React from "react";
 
-import { useModal } from "@/context/ModalContext";
+import { useModal } from "@/utils/useModal";
 import {
   ModalHorizontalPosition,
   ModalVerticalPosition,
@@ -11,7 +11,7 @@ import {
   WidthType,
   HeightType,
   ChildrenVerticalPosition
-} from "@/constants";
+} from "@/utils/constants";
 
 export default function Home() {
   const { onCloseModal, closeModal, openModal, openBottomSheet, openDialogBox, openSideBar } = useModal();
@@ -34,31 +34,31 @@ export default function Home() {
       }, 
       modalConfig: {
         overlayConfig: {
-          backgroundColor: "pink",
+          backgroundColor: "255,192,203",
           modalAnimationConfig: {
             animationType: ModalOverlayAnimation.FADE_IN,
             animationDurationInSeconds: 1
           }
-      },
-      wrapperConfig: {
-        verticalAlignment: ModalVerticalPosition.CENTER,
-        horizontalAlignment: ModalHorizontalPosition.CENTER,
-        backdropClose: true,
-        modalAnimationConfig: {
-          animationType: ModalWrapperAnimations.SLIDE_IN,
-          animationDurationInSeconds: 1,
-          slideAnimationDirection: SlideAnimationDirection.LEFT_RIGHT
+        },
+        wrapperConfig: {
+          verticalAlignment: ModalVerticalPosition.CENTER,
+          horizontalAlignment: ModalHorizontalPosition.CENTER,
+          backdropClose: true,
+          modalAnimationConfig: {
+            animationType: ModalWrapperAnimations.NONE,
+            animationDurationInSeconds: 1,
+            slideAnimationDirection: SlideAnimationDirection.BOTTOM_TOP
+          }
+        },
+        contentConfig: {
+          backgroundColor: "255,255,0",
+          padding: 100,
+          widthType: WidthType.CUSTOM,
+          heightType: HeightType.CUSTOM,
+          height: 70,
+          width: 50,
+          topRightBorderRadius: 100
         }
-      },
-      contentConfig: {
-        backgroundColor: "red",
-        padding: 15,
-        widthType: WidthType.CUSTOM,
-        heightType: HeightType.CUSTOM,
-        height: 70,
-        width: 50,
-        topRightBorderRadius: 100
-      }
     }});
   }
 
@@ -69,7 +69,7 @@ export default function Home() {
       }, 
       modalConfig: {
         overlayConfig: {
-          backgroundColor: "pink",
+          backgroundColor: "255,192,203",
           modalAnimationConfig: {
             animationType: ModalOverlayAnimation.FADE_IN,
             animationDurationInSeconds: 1
@@ -82,7 +82,7 @@ export default function Home() {
         }
       },
       contentConfig: {
-        backgroundColor: "red",
+        backgroundColor: "255,0,0",
         padding: 15,
         heightType: HeightType.CUSTOM,
         height: 70,
@@ -99,7 +99,7 @@ export default function Home() {
       },
       modalConfig: {
         overlayConfig: {
-          backgroundColor: "pink",
+          backgroundColor: "255,192,203",
           modalAnimationConfig: {
             animationType: ModalOverlayAnimation.FADE_IN,
             animationDurationInSeconds: 1
@@ -112,7 +112,7 @@ export default function Home() {
         }
       },
       contentConfig: {
-        backgroundColor: "red",
+        backgroundColor: "255,0,0",
         padding: 15,
         widthType: WidthType.CUSTOM,
         heightType: HeightType.CUSTOM,
@@ -134,7 +134,7 @@ export default function Home() {
       },
       modalConfig: {
         overlayConfig: {
-          backgroundColor: "pink",
+          backgroundColor: "255,192,203",
           modalAnimationConfig: {
             animationType: ModalOverlayAnimation.FADE_IN,
             animationDurationInSeconds: 1
@@ -148,13 +148,13 @@ export default function Home() {
         }
       },
       contentConfig: {
-        backgroundColor: "red",
+        backgroundColor: "255,0,0",
         childrenVerticalPosition: ChildrenVerticalPosition.CENTER,
         widthType: WidthType.CUSTOM,
         width: 20,
         padding: 0,
-        bottomLeftBorderRadius: 100,
-        topLeftBorderRadius: 100
+        bottomLeftBorderRadius: 20,
+        topLeftBorderRadius: 20
       }
     }})
   }
