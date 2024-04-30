@@ -1,15 +1,16 @@
 import { useModal } from "@/utils/useModal"
-import { ModalOverlayAnimation, HeightType } from "@/utils/constants";
+import { HeightType } from "@/utils/constants";
 
 const Modal = () => {
-  const { closeSelf, openModal } = useModal();
+  const { openModal } = useModal();
 
   const Modal1 = () => {
+    const { closeModal } = useModal();
     return (
       <>
         <div style={{color: "Black"}}>Hey</div><div >Hey</div>
         <div onClick = {() => {
-          closeSelf({msg: "Self Modal Closed"})
+          closeModal({msg: "Self Modal Closed"})
         }}>Close</div>
       </>
     )

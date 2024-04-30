@@ -52,12 +52,10 @@ export default function Home() {
         },
         contentConfig: {
           backgroundColor: "255,255,0",
-          padding: 100,
           widthType: WidthType.CUSTOM,
           heightType: HeightType.CUSTOM,
-          height: 70,
-          width: 50,
-          topRightBorderRadius: 100
+          height: "calc(100% - 64px)",
+          width: "450px",
         }
     }});
   }
@@ -66,30 +64,7 @@ export default function Home() {
     openBottomSheet({
       content: {
         component: <Modal />
-      }, 
-      modalConfig: {
-        overlayConfig: {
-          backgroundColor: "255,192,203",
-          modalAnimationConfig: {
-            animationType: ModalOverlayAnimation.FADE_IN,
-            animationDurationInSeconds: 1
-          }
-      },
-      wrapperConfig: {
-        backdropClose: true,
-        modalAnimationConfig: {
-          animationDurationInSeconds: 1,
-        }
-      },
-      contentConfig: {
-        backgroundColor: "255,0,0",
-        padding: 15,
-        heightType: HeightType.CUSTOM,
-        height: 70,
-        topRightBorderRadius: 50,
-        topLeftBorderRadius: 50
-      }
-    }});
+      }});
   }
 
   const onHandleDialogClick = () => {
@@ -113,12 +88,10 @@ export default function Home() {
       },
       contentConfig: {
         backgroundColor: "255,0,0",
-        padding: 15,
         widthType: WidthType.CUSTOM,
         heightType: HeightType.CUSTOM,
-        height: 70,
-        width: 50,
-        bottomRightBorderRadius: 100
+        height: "170px",
+        width: "150px"
       }
     }});
   }
@@ -148,13 +121,11 @@ export default function Home() {
         }
       },
       contentConfig: {
+        padding: 10,
         backgroundColor: "255,0,0",
-        childrenVerticalPosition: ChildrenVerticalPosition.CENTER,
+        childrenVerticalPosition: ChildrenVerticalPosition.BOTTOM,
         widthType: WidthType.CUSTOM,
-        width: 20,
-        padding: 0,
-        bottomLeftBorderRadius: 20,
-        topLeftBorderRadius: 20
+        width: "120px"
       }
     }})
   }

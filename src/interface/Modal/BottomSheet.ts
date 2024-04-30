@@ -2,6 +2,6 @@ import { IModalConfig, IModalWrapperAnimationConfig, IWrapperConfig, IContentCon
 
 type BottomSheetAnimationConfig = Omit<IModalWrapperAnimationConfig, "animationType" | "slideAnimationDirection">
 type BottomSheetWrapperConfig = Omit<IWrapperConfig, "verticalAlignment" | "horizontalAlignment" | "modalAnimationConfig"> & {modalAnimationConfig?: BottomSheetAnimationConfig}
-type BottomSheetContentConfig = Omit<IContentConfig, "widthType" | "width" | "bottomLeftBorderRadius" | "bottomRightBorderRadius">
+type BottomSheetContentConfig = Omit<IContentConfig, "bottomLeftBorderRadius" | "bottomRightBorderRadius" | "topLeftBorderRadius" | "topRightBorderRadius" | "bottomLeftBorderRadius" | "bottomRightBorderRadius"> & {borderRadius?: number}
 export type BottomSheetConfig = Omit<IModalConfig, "wrapperConfig" | "contentConfig"> & {wrapperConfig?: BottomSheetWrapperConfig, contentConfig?: BottomSheetContentConfig};
 

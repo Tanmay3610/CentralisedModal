@@ -32,8 +32,6 @@ export interface IOverlayConfig {
 export interface IWrapperConfig {
   verticalAlignment?: ModalVerticalPosition;
   horizontalAlignment?: ModalHorizontalPosition;
-  closeButtonVerticalPosition?: ModalCloseButtonVerticalPosition;
-  closeButtonHorizontalPosition?: ModalCloseButtonHorizontalPosition;
   modalAnimationConfig?: IModalWrapperAnimationConfig;
   backdropClose?: boolean;
 }
@@ -47,10 +45,15 @@ export interface IContentConfig {
   bottomRightBorderRadius?: number;
   widthType?: WidthType;
   heightType?: HeightType;
-  height?: number;
-  width?: number;
+  height?: string;
+  width?: string;
   childrenHorizontalPosition?: ChildrenHorizontalPosition;
   childrenVerticalPosition?: ChildrenVerticalPosition;
+  closeButtonVerticalPosition?: ModalCloseButtonVerticalPosition;
+  closeButtonHorizontalPosition?: ModalCloseButtonHorizontalPosition;
+  closeButtonMargin?: number;
+  closeButtonWidth?: number;
+  closeButtonHeight?: number;
 }
 
 export interface IModalConfig {

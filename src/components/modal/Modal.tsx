@@ -29,13 +29,13 @@ const Modal: React.FC = () => {
             <Overlay overlayConfig={overlayConfig!} verticalAlign={wrapperConfig?.verticalAlignment!} horizontalAlign={wrapperConfig?.horizontalAlignment!}>
               <Wrapper
                 wrapperConfig={wrapperConfig!} 
-                closeModal={closeModal} 
+                closeModal={closeModal}
                 widthType={contentConfig!.widthType!}
                 width={contentConfig!.width!}
                 heightType={contentConfig!.heightType!}
                 height={contentConfig!.height!}
                 >
-                <Content contentConfig={contentConfig!}>
+                <Content contentConfig={contentConfig!} closeModal={closeModal}>
                   <ModalProvider>
                     <Modal />
                     {content}
